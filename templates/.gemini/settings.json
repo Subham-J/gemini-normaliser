@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "BeforeAgent": [
+      {"hooks": [{"type": "command", "name": "guard-before-agent", "command": "python3 $GEMINI_PROJECT_DIR/.gemini/guard/gemini_guard.py BeforeAgent || echo {}", "timeout": 10000}]}
+    ],
+    "BeforeTool": [
+      {"matcher": ".*", "hooks": [{"type": "command", "name": "guard-before-tool", "command": "python3 $GEMINI_PROJECT_DIR/.gemini/guard/gemini_guard.py BeforeTool || echo {}", "timeout": 10000}]}
+    ],
+    "AfterTool": [
+      {"matcher": ".*", "hooks": [{"type": "command", "name": "guard-after-tool", "command": "python3 $GEMINI_PROJECT_DIR/.gemini/guard/gemini_guard.py AfterTool || echo {}", "timeout": 10000}]}
+    ],
+    "AfterAgent": [
+      {"hooks": [{"type": "command", "name": "guard-after-agent", "command": "python3 $GEMINI_PROJECT_DIR/.gemini/guard/gemini_guard.py AfterAgent || echo {}", "timeout": 10000}]}
+    ]
+  }
+}

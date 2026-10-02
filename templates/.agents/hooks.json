@@ -1,0 +1,16 @@
+{
+  "gemini-normaliser": {
+    "PreToolUse": [
+      {"matcher": "*", "hooks": [{"type": "command", "command": "python3 ../.gemini/guard/gemini_guard.py --agy PreToolUse || echo {}", "timeout": 10}]}
+    ],
+    "PostToolUse": [
+      {"matcher": "*", "hooks": [{"type": "command", "command": "python3 ../.gemini/guard/gemini_guard.py --agy PostToolUse || echo {}", "timeout": 10}]}
+    ],
+    "PreInvocation": [
+      {"type": "command", "command": "python3 ../.gemini/guard/gemini_guard.py --agy PreInvocation || echo {}", "timeout": 10}
+    ],
+    "Stop": [
+      {"type": "command", "command": "python3 ../.gemini/guard/gemini_guard.py --agy Stop || echo {}", "timeout": 10}
+    ]
+  }
+}
