@@ -53,6 +53,15 @@ class InstallTest(unittest.TestCase):
         g = (self.p / "GEMINI.md").read_text()
         assert g.startswith("my notes") and g.count(install.IMPORT_AGY) == 1
 
+    def test_edited_contract_is_kept(self):
+        run(self.p)
+        c = self.p / ".gemini/guard/contract.md"
+        c.write_text("my own rules\n")
+        assert "kept your edited" in run(self.p)
+        assert c.read_text() == "my own rules\n"
+        run(self.p, "--reset-contract")
+        assert c.read_text() != "my own rules\n"
+
     def test_uninstall_restores(self):
         (self.p / ".gemini").mkdir()
         (self.p / ".gemini/settings.json").write_text(json.dumps({"model": {"name": "x"}}))

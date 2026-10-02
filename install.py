@@ -127,6 +127,7 @@ def main(argv=None):
                     help="append-only path relative to the project (repeatable; only on first install)")
     ap.add_argument("--check", action="store_true", help="report status and rule-file sizes only")
     ap.add_argument("--uninstall", action="store_true")
+    ap.add_argument("--reset-contract", action="store_true", help="overwrite an edited contract.md")
     a = ap.parse_args(argv)
     project = os.path.abspath(a.project)
     if not os.path.isdir(project):
@@ -148,7 +149,13 @@ def main(argv=None):
 
     os.makedirs(guard, exist_ok=True)
     for name in GUARD_FILES:
-        shutil.copy2(os.path.join(HERE, "guard", name), os.path.join(guard, name))
+        dest = os.path.join(guard, name)
+        if name == "contract.md" and os.path.exists(dest) and not a.reset_contract:
+            same = open(dest, "rb").read() == open(os.path.join(HERE, "guard", name), "rb").read()
+            if not same:
+                print("kept your edited .gemini/guard/contract.md (--reset-contract to replace it)")
+                continue
+        shutil.copy2(os.path.join(HERE, "guard", name), dest)
     merge_agy_hooks(os.path.join(project, ".agents", "hooks.json"))
     merge_cli_settings(os.path.join(project, ".gemini", "settings.json"))
     cfg = os.path.join(project, ".gemini", "guard.json")
