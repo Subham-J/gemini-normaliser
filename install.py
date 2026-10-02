@@ -74,7 +74,11 @@ def merge_agy_hooks(path, remove=False):
     data = load_json(path, {})
     data = {k: v for k, v in data.items() if MARK not in json.dumps(v)}  # also clears old key names
     if not remove:
-        data[HOOK_KEY] = template(".agents", "hooks.json")[HOOK_KEY]
+        # absolute path: Antigravity builds differ on the hook working directory (T3 Code's
+        # bundled engine could not run a relative one), so do not depend on it
+        guard = os.path.join(os.path.dirname(os.path.dirname(path)), ".gemini", "guard", "gemini_guard.py")
+        data[HOOK_KEY] = json.loads(json.dumps(template(".agents", "hooks.json")[HOOK_KEY])
+                                    .replace("{GUARD}", guard.replace("\\", "/").replace('"', '\\"')))
     if data or os.path.exists(path):
         write_json(path, data)
 

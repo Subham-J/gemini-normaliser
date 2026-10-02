@@ -78,7 +78,8 @@ Session state lives in `.gemini/tmp/guard/<session>.json`: failure counts, read 
 
 ### Antigravity quirks found while building this (agy, October 2026)
 
-- **PreToolUse must always return a decision.** `{}` is read as *deny*. The guard returns `ask` when it has no objection; measured to behave the same as having no hook.
+- **PreToolUse must always return a decision.** `{}` is read as *deny*. The guard returns `ask` when it has no objection; measured to behave the same as having no hook. The shell fallback also prints `ask`, so a broken guard never blocks you.
+- **Hook paths are absolute.** T3 Code's bundled engine reported `External hook ... failed to execute` with a path relative to `.agents/`; `install.py` writes the absolute script path and `/usr/bin/python3`. Re-run `install.py` if you move the project.
 - **A failed command arrives with an empty `error`.** The result (`The command exited with code N`) is in the transcript at the same step index, written *after* PostToolUse runs. The guard scores it on the next event.
 - **PostToolUse cannot talk to the model.** Failure notes go out as an `ephemeralMessage` on the next `PreInvocation`.
 - **A normal finish is `terminationReason: NO_TOOL_CALL`**, not `model_stop`.
